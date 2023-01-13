@@ -11,44 +11,22 @@ struct ContentView: View {
     @State var displayText = "Hello, world!"
     @State var saveText = "SampleText"
     var body: some View {
-        VStack {
-            Text("読み込んだテキストデータ：\(displayText)")
-            HStack {
-                Text("書き込みたい文字列：")
-                TextField("test", text: $saveText)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-            }
-            
-            HStack{
-                Button {
-                    if let data = saveText.data(using: .utf8) {
-                        let fileName = "Sample.txt"
-                        saveData(name: fileName, data: data)
+        TabView {
+            FileReadWriteView()
+                .tabItem {
+                    VStack {
+                        Image(systemName: "a")
+                        Text("ファイルの読み書き")
                     }
-                } label: {
-                    Text("save")
-                        .padding()
-                        .background(.orange)
-                }
-                .padding()
-                
-                Button {
-                    let fileName = "Sample.txt"
-                    if let data = loadData(name: fileName) ,
-                       let text = String(data: data, encoding: .utf8) {
-                        displayText = text
-                    } else {
-                        displayText = "load Failed"
+            }.tag(1)
+            FileDownloadView()
+                .tabItem {
+                    VStack {
+                        Image(systemName: "bold")
+                        Text("ファイルダウンロード")
                     }
-                } label: {
-                    Text("load")
-                        .padding()
-                        .background(.orange)
-                }
-                .padding()
-            }
+            }.tag(2)
         }
-        .padding()
     }
     
     func saveData(name: String, data: Data) {
